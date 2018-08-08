@@ -3,6 +3,7 @@ package ru.ovchinnikov;
 
 import org.junit.jupiter.api.Test;
 
+import static java.util.stream.IntStream.generate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.ovchinnikov.WaterCalculator.calculateWaterAmount;
@@ -73,5 +74,32 @@ class WaterCalculatorTest {
         final int[] landscape = new int[32001];
 
         assertThrows(IllegalArgumentException.class, () -> calculateWaterAmount(landscape));
+    }
+
+    @Test
+    void should_return_zero__when_landscape_is_of_zeros() {
+        final int[] landscape = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+        final long waterAmount = calculateWaterAmount(landscape);
+
+        assertEquals(0, waterAmount);
+    }
+
+    @Test
+    void should_return_zero__when_landscape_is_of_max_length_but_flat() {
+        final int[] landscape = generate(() -> 32_000).limit(32_000).toArray();
+
+        final long waterAmount = calculateWaterAmount(landscape);
+
+        assertEquals(0, waterAmount);
+    }
+
+    @Test
+    void should_return_zero__when_landscape_is_a_pyramid() {
+        final int[] landscape = {0, 1, 2, 3, 4, 5, 6, 7, 8, 7, 6, 5, 4, 3, 2, 1};
+
+        final long waterAmount = calculateWaterAmount(landscape);
+
+        assertEquals(0, waterAmount);
     }
 }
